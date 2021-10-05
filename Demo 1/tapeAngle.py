@@ -9,6 +9,18 @@ if __name__ == '__main__':
  
     # initialize the camera and grab a reference to the raw camera capture
     camera = PiCamera()
+    
+    # automatic white balance
+    camera.iso = 100
+    time.sleep(2)
+    
+    camera.shutter_speed = camera.exposure_speed
+    camera.exposure_mode = 'off'
+    
+    g = camera.awb_gains
+    camera.awb_mode = 'off'
+    camera.awb_gains = g
+    
     rawCapture = PiRGBArray(camera)
  
     # allow the camera to warmup
