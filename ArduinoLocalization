@@ -1,0 +1,77 @@
+#include <Encoder.h>
+
+Encoder motorEnc(2, 8); 
+const double pi = 3.14159265;
+
+const int resetPin = 3;
+const int directionPin = 7;
+const int motorPin = 9;
+int motorSpeed = 100;
+int motorDirection = 0;
+int resetFlag = 0;
+double theta = 0;
+double diff = 0;
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Encoder start: ");
+  pinMode(motorPin, INPUT); //pin 9
+  pinMode(directionPin, INPUT); //pin 7
+  attachInterrupt(digitalPinToInterrupt(resetPin), reset, RISING); //define reset interrupt
+}
+
+long oldPosition  = -999;
+
+void loop() {
+  //motorSpeed = 100;
+  analogWrite(motorPin, motorSpeed);
+  digitalWrite(directionPin, motorDirection); //0 --> CW, 1 --> CCW
+
+  long newPosition = motorEnc.read();
+
+  if (resetFlag == 1) {
+    //theta desired = 0
+    Serial.println("AGONY");
+    //delay(diff / pi * 615);
+    analogWrite(motorPin,0);
+    delay(1000);
+    resetFlag = 0;
+  }
+
+
+  
+  if (newPosition != oldPosition) {
+    oldPosition = newPosition;
+
+    //one full rotation of the motor shaft is equivalent to 3200 counts, which is 64 times the gear ratio (50:1)
+    double theta = 2 * pi * (double) newPosition / 3200.00;
+
+    while ((theta > 2 * pi) || (theta < 0)) {
+        if (theta > 2 * pi) {
+        theta = theta - 2 * pi;
+      } else if (theta < 0) {
+        theta = theta + 2 * pi;
+      }
+    }
+    
+    Serial.println((String)theta + "  " + (String)millis());
+  }
+}
+
+void reset() {
+  Serial.println("bababooey");
+  //if < pi go CCW
+
+  resetFlag = 1;
+  
+  //diff is the absolute difference in angular position between current theta and 0 (starting position)
+  if (theta < pi) {
+    motorDirection = 0;
+    diff = theta;
+  } else {
+    motorDirection = 1;
+    diff = 2 * pi - theta;
+  }
+  analogWrite(motorPin,0);
+
+}
