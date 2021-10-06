@@ -4,4 +4,6 @@ angle.py - Python script that continuously takes pictures and outputs the angle 
 
 angle1.py - Python script that continuously takes pictures and outputs the angle in degreees depending on where a yellow marker is relative to the camera (Right = 0, Top = 90, Left = 180, Bottom = 270)
 
+Mini Project Marker Detection.pdf - Document describing the marker detection schemes
+
 ArduinoLocalization - Arduino code that controls the speed and the direction of the motor rotation using its built-in encoder. 
