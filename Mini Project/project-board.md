@@ -4,4 +4,4 @@ Cole Binder - system integration, wrote the part of the python code that took th
 
 Quinn Ruddy - localization, wrote arduino code that interfaced with the motor to read its encoder, and powered the motor based on the value given by the control system, also did the wiring between the arduino and the motor that allowed them to interface properly
 
-Colin Thompson - computer vision, write Python code to determine the desired angle of the wheel depending on a colored marker
+Colin Thompson - computer vision, write Python code to determine the desired angle of the wheel depending on the position a colored marker
