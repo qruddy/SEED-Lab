@@ -8,16 +8,16 @@ import smbus
 import board
 import adafruit_character_lcd.character_lcd_rgb_i2c as character_lcd
 from math import pi
-
+#initialize size of LCD
 lcd_columns = 16
 lcd_rows = 2
-
+#initialize i2C
 bus = smbus.SMBus(1)
 i2c = board.I2C()
 lcd = character_lcd.Character_LCD_RGB_I2C(i2c,lcd_columns,lcd_rows)
-
+#initialize address to be written to and read from
 address = 0x04
-
+#function to write the angle value to the arduino
 def writeNumber(value):
     bus.write_byte(address, value)
     return -1
@@ -103,10 +103,10 @@ if __name__ == '__main__':
                         angle = 180
                         
                 print(angle) # print calculated angle
-                lcd.clear()
+                lcd.clear() #clear lcd screen
                 writeNumber(int(angle/2)) # sends angle/2 to arduino (prevents integer overflow)
                 time.sleep(1)
-                
+                #print angle sent on lcd
                 lcd.message = "Setpoint: %d" % angle
         except:
             print("Couldn't load")
