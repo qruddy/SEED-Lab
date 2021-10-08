@@ -1,7 +1,6 @@
 # SEED-Lab
 Repository for EENG350 SEED Lab Team 10
 
-Contains files with code for arduino, which controls the motor and contains the control system,
-and the raspberry pi, which uses a camera to detect a marker and communicates this information to the arduino.
+Contains documentation of projects completed by Team 10 for Systems Exploration, Engineering and Design.
 
-The repository is organized by files used with the arduino and with the raspberry pi.
+Mini Project folder - contains documentation for the mini-project, in which an arduino controls the rotation of a wheel with a motor, using inputs from the motor's encoder and data given to it by a raspberry pi, which uses a camera to detect a marker, which indicates the angle to which the wheel should turn. The arduino contorl utilizes a PI contorller to complete this task and avoid overshoot.
