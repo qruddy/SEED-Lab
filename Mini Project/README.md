@@ -7,3 +7,5 @@ angle1.py - Python script that continuously takes pictures and outputs the angle
 Mini Project Marker Detection.pdf - Document describing the marker detection schemes
 
 ArduinoLocalization - Arduino code that controls the speed and the direction of the motor rotation using its built-in encoder. 
+
+project-board.md - Document describing each team member and their role in the project.
