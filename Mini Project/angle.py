@@ -27,10 +27,9 @@ if __name__ == '__main__':
     # initialize the camera and grab a reference to the raw camera capture
     camera = PiCamera()
     
-    # autmatic white balance
+    # automatic white balance
     camera.iso = 100
     time.sleep(2)
-    
     camera.shutter_speed = camera.exposure_speed
     camera.exposure_mode = 'off'
     
@@ -51,7 +50,6 @@ if __name__ == '__main__':
     while(1): # loop until the porgram is manually stopped
     
         # grab an image from the camera
-        #print("Capturing Image...")
         try:
             camera.capture(rawCapture, format="bgr")
             image = rawCapture.array
@@ -59,14 +57,12 @@ if __name__ == '__main__':
             print("Failed to capture")
 
     # save the image to the disk
-        #print("Saving image")
         try:
             cv2.imwrite('test.jpg', image)
         except:
             print("Couldn't save")
 
     # display the image
-        #print("Loading image")
         try:
             img = cv2.imread('test.jpg')
             img = img[:,:,::-1] # flips image colors
@@ -84,45 +80,34 @@ if __name__ == '__main__':
             ret,gray = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY) # converts grayscale image to binary image
             pos = np.nonzero(gray) # creates array of all the pixels that correspond to the hexagon
             
-            #cv2.imshow('Test', np.hstack([img, output]))
-            #cv2.waitKey(0)
-            #cv2.destroyAllWindows()
-            
-            if(pos[0].size != 0): # checks if the hexagon is in the image
-                #print("x: ", np.mean(pos[1]))
-                #print("y: ", np.mean(pos[0])) # prints mean x and y positions
-                
+            if(pos[0].size != 0): # checks if the marker is in the image
                 relX = (np.mean(pos[1]) - 480) / 960
-                relY = (np.mean(pos[0]) - 270) / 540 # calculates mean vertical and horizontal phi postions
+                relY = (np.mean(pos[0]) - 270) / 540 # calculates relative x and y positions
                 
                 phiX = relX * 30
-                phiY = relY * -25
+                phiY = relY * -25 # calculates mean vertical and horizontal phi angles
                 
-                if(phiX >= 0):
-                    if(phiY >= 6.25):
+                if(phiX >= 0): # if marker is left of camera 
+                    if(phiY >= 6.25): # if marker is high, set angle to 90
                         angle = 90
-                    elif (phiY <= -6.25):
+                    elif (phiY <= -6.25): # if marker is low, set angle to 270
                         angle = 270
-                    else:
+                    else: # if marker is in the middle, set angle to 0
                         angle = 0
-                else:
-                    if(phiY >= 6.25):
+                else: # if marker is right of camera
+                    if(phiY >= 6.25): # if marker is high, set angle to 90
                         angle = 90
-                    elif (phiY <= -6.25):
+                    elif (phiY <= -6.25): # if marker is low, set angle to 270
                         angle = 270
-                    else:
+                    else: # if marker is in the middle, set angle to 180
                         angle = 180
                         
-                #print("Phi X: ", phiX)
-                #print("Phi Y: ", phiY)
-                print(angle)
+                print(angle) # print calculated angle
                 lcd.clear()
-                writeNumber(int(angle/2))
+                writeNumber(int(angle/2)) # sends angle/2 to arduino (prevents integer overflow)
                 time.sleep(1)
                 
                 lcd.message = "Setpoint: %d" % angle
-                #print("Phi X: ", relX * 30)
-                #print("Phi Y: ", relY * 25) # prints mean vertical and horizontal phi positions
         except:
             print("Couldn't load")
             
