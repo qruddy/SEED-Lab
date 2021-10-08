@@ -7,3 +7,5 @@ Mini Project Marker Detection.pdf - Document describing the marker detection sch
 ArduinoLocalization - Arduino code that controls the speed and the direction of the motor rotation using its built-in encoder. 
 
 project-board.md - Document describing each team member and their role in the project
+
+mini_arduino.ino - final, complete arduino code that reads data from the pi, reads the motor encoder, and rotates the wheel based on desired angle and control system
