@@ -1,8 +1,8 @@
 #include <Encoder.h>
 
 //declaration of wheels
-Encoder left(2,13);
-Encoder right(3,14);
+Encoder left(2,11);
+Encoder right(3,13);
 
 //pin declarations
 const int enablePin = 4;
