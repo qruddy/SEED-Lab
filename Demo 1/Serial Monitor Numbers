@@ -1,0 +1,530 @@
+Encoder start: 
+t0.11
+thetadot 2 (L motor):0.11
+rho dot:0.03
+thetadot 1 (R motor):0.1⸮Encoder start: 
+thetadot 1 (R motor):0.00
+thetadot 2 (L motor):0.00
+rho dot:0.00
+thetadot 1 (R motor):0.00
+thetadot 2 (L motor):0.02
+rho dot:0.01
+thetadot 1 (R motor):0.05
+thetadot 2 (L motor):0.05
+rho dot:0.01
+thetadot 1 (R motor):0.07
+thetadot 2 (L motor):0.07
+rho dot:0.02
+thetadot 1 (R motor):0.09
+thetadot 2 (L motor):0.09
+rho dot:0.02
+thetadot 1 (R motor):0.09
+thetadot 2 (L motor):0.09
+rho dot:0.02
+thetadot 1 (R motor):0.09
+thetadot 2 (L motor):0.09
+rho dot:0.02
+thetadot 1 (R motor):0.09
+thetadot 2 (L motor):0.09
+rho dot:0.02
+thetadot 1 (R motor):0.11
+thetadot 2 (L motor):0.11
+rho dot:0.03
+thetadot 1 (R motor):0.11
+thetadot 2 (L motor):0.11
+rho dot:0.03
+thetadot 1 (R motor):0.11
+thetadot 2 (L motor):0.11
+rho dot:0.03
+thetadot 1 (R motor):0.11
+thetadot 2 (L motor):0.11
+rho dot:0.03
+thetadot 1 (R motor):0.14
+thetadot 2 (L motor):0.14
+rho dot:0.03
+thetadot 1 (R motor):0.13
+thetadot 2 (L motor):0.13
+rho dot:0.03
+thetadot 1 (R motor):0.14
+thetadot 2 (L motor):0.14
+rho dot:0.03
+thetadot 1 (R motor):0.16
+thetadot 2 (L motor):0.16
+rho dot:0.04
+thetadot 1 (R motor):0.13
+thetadot 2 (L motor):0.13
+rho dot:0.03
+thetadot 1 (R motor):0.16
+thetadot 2 (L motor):0.16
+rho dot:0.04
+thetadot 1 (R motor):0.16
+thetadot 2 (L motor):0.16
+rho dot:0.04
+thetadot 1 (R motor):0.18
+thetadot 2 (L motor):0.18
+rho dot:0.04
+thetadot 1 (R motor):0.16
+thetadot 2 (L motor):0.16
+rho dot:0.04
+thetadot 1 (R motor):0.18
+thetadot 2 (L motor):0.18
+rho dot:0.04
+thetadot 1 (R motor):0.20
+thetadot 2 (L motor):0.20
+rho dot:0.05
+thetadot 1 (R motor):0.18
+thetadot 2 (L motor):0.18
+rho dot:0.04
+thetadot 1 (R motor):0.20
+thetadot 2 (L motor):0.20
+rho dot:0.05
+thetadot 1 (R motor):0.22
+thetadot 2 (L motor):0.22
+rho dot:0.06
+thetadot 1 (R motor):0.22
+thetadot 2 (L motor):0.22
+rho dot:0.06
+thetadot 1 (R motor):0.22
+thetadot 2 (L motor):0.22
+rho dot:0.06
+thetadot 1 (R motor):0.22
+thetadot 2 (L motor):0.22
+rho dot:0.06
+thetadot 1 (R motor):0.25
+thetadot 2 (L motor):0.25
+rho dot:0.06
+thetadot 1 (R motor):0.25
+thetadot 2 (L motor):0.25
+rho dot:0.06
+thetadot 1 (R motor):0.25
+thetadot 2 (L motor):0.25
+rho dot:0.06
+thetadot 1 (R motor):0.27
+thetadot 2 (L motor):0.27
+rho dot:0.07
+thetadot 1 (R motor):0.29
+thetadot 2 (L motor):0.29
+rho dot:0.07
+thetadot 1 (R motor):0.27
+thetadot 2 (L motor):0.27
+rho dot:0.07
+thetadot 1 (R motor):0.25
+thetadot 2 (L motor):0.25
+rho dot:0.06
+thetadot 1 (R motor):0.27
+thetadot 2 (L motor):0.27
+rho dot:0.07
+thetadot 1 (R motor):0.27
+thetadot 2 (L motor):0.27
+rho dot:0.07
+thetadot 1 (R motor):0.27
+thetadot 2 (L motor):0.27
+rho dot:0.07
+thetadot 1 (R motor):0.27
+thetadot 2 (L motor):0.27
+rho dot:0.07
+thetadot 1 (R motor):0.29
+thetadot 2 (L motor):0.29
+rho dot:0.07
+thetadot 1 (R motor):0.29
+thetadot 2 (L motor):0.29
+rho dot:0.07
+thetadot 1 (R motor):0.32
+thetadot 2 (L motor):0.32
+rho dot:0.08
+thetadot 1 (R motor):0.32
+thetadot 2 (L motor):0.32
+rho dot:0.08
+thetadot 1 (R motor):0.29
+thetadot 2 (L motor):0.29
+rho dot:0.07
+thetadot 1 (R motor):0.32
+thetadot 2 (L motor):0.32
+rho dot:0.08
+thetadot 1 (R motor):0.32
+thetadot 2 (L motor):0.32
+rho dot:0.08
+thetadot 1 (R motor):0.32
+thetadot 2 (L motor):0.32
+rho dot:0.08
+thetadot 1 (R motor):0.32
+thetadot 2 (L motor):0.32
+rho dot:0.08
+thetadot 1 (R motor):0.31
+thetadot 2 (L motor):0.31
+rho dot:0.08
+thetadot 1 (R motor):0.34
+thetadot 2 (L motor):0.34
+rho dot:0.08
+thetadot 1 (R motor):0.36
+thetadot 2 (L motor):0.36
+rho dot:0.09
+thetadot 1 (R motor):0.34
+thetadot 2 (L motor):0.34
+rho dot:0.08
+thetadot 1 (R motor):0.34
+thetadot 2 (L motor):0.34
+rho dot:0.08
+thetadot 1 (R motor):0.31
+thetadot 2 (L motor):0.31
+rho dot:0.08
+thetadot 1 (R motor):0.34
+thetadot 2 (L motor):0.34
+rho dot:0.08
+thetadot 1 (R motor):0.34
+thetadot 2 (L motor):0.34
+rho dot:0.08
+thetadot 1 (R motor):0.34
+thetadot 2 (L motor):0.34
+rho dot:0.08
+thetadot 1 (R motor):0.34
+thetadot 2 (L motor):0.34
+rho dot:0.08
+thetadot 1 (R motor):0.36
+thetadot 2 (L motor):0.36
+rho dot:0.09
+thetadot 1 (R motor):0.36
+thetadot 2 (L motor):0.36
+rho dot:0.09
+thetadot 1 (R motor):0.38
+thetadot 2 (L motor):0.38
+rho dot:0.09
+thetadot 1 (R motor):0.36
+thetadot 2 (L motor):0.36
+rho dot:0.09
+thetadot 1 (R motor):0.38
+thetadot 2 (L motor):0.38
+rho dot:0.09
+thetadot 1 (R motor):0.36
+thetadot 2 (L motor):0.36
+rho dot:0.09
+thetadot 1 (R motor):0.38
+thetadot 2 (L motor):0.38
+rho dot:0.09
+thetadot 1 (R motor):0.36
+thetadot 2 (L motor):0.36
+rho dot:0.09
+thetadot 1 (R motor):0.36
+thetadot 2 (L motor):0.36
+rho dot:0.09
+thetadot 1 (R motor):0.38
+thetadot 2 (L motor):0.38
+rho dot:0.09
+thetadot 1 (R motor):0.38
+thetadot 2 (L motor):0.38
+rho dot:0.09
+thetadot 1 (R motor):0.36
+thetadot 2 (L motor):0.36
+rho dot:0.09
+thetadot 1 (R motor):0.38
+thetadot 2 (L motor):0.38
+rho dot:0.09
+thetadot 1 (R motor):0.40
+thetadot 2 (L motor):0.40
+rho dot:0.10
+thetadot 1 (R motor):0.41
+thetadot 2 (L motor):0.41
+rho dot:0.10
+thetadot 1 (R motor):0.38
+thetadot 2 (L motor):0.38
+rho dot:0.09
+thetadot 1 (R motor):0.41
+thetadot 2 (L motor):0.41
+rho dot:0.10
+thetadot 1 (R motor):0.41
+thetadot 2 (L motor):0.41
+rho dot:0.10
+thetadot 1 (R motor):0.38
+thetadot 2 (L motor):0.38
+rho dot:0.09
+thetadot 1 (R motor):0.41
+thetadot 2 (L motor):0.41
+rho dot:0.10
+thetadot 1 (R motor):0.41
+thetadot 2 (L motor):0.41
+rho dot:0.10
+thetadot 1 (R motor):0.38
+thetadot 2 (L motor):0.38
+rho dot:0.09
+thetadot 1 (R motor):0.38
+thetadot 2 (L motor):0.38
+rho dot:0.09
+thetadot 1 (R motor):0.38
+thetadot 2 (L motor):0.38
+rho dot:0.09
+thetadot 1 (R motor):0.41
+thetadot 2 (L motor):0.41
+rho dot:0.10
+thetadot 1 (R motor):0.41
+thetadot 2 (L motor):0.41
+rho dot:0.10
+thetadot 1 (R motor):0.41
+thetadot 2 (L motor):0.41
+rho dot:0.10
+thetadot 1 (R motor):0.41
+thetadot 2 (L motor):0.41
+rho dot:0.10
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.43
+thetadot 2 (L motor):0.43
+rho dot:0.10
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
+thetadot 1 (R motor):0.45
+thetadot 2 (L motor):0.45
+rho dot:0.11
+thetadot 1 (R motor):0.47
+thetadot 2 (L motor):0.47
+rho dot:0.12
