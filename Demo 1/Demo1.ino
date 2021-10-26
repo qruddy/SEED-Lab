@@ -39,14 +39,16 @@ double deltaThetaL = 0;
 double deltaThetaR = 0;
 double prevPosition = 0;
 double currentPosition = 0;
+int wheelPWM = 100;
 
 void loop() {
 
-  analogWrite(motorPinL, 100);
-  analogWrite(motorPinR, 100);
+  analogWrite(motorPinL, wheelPWM);
+  analogWrite(motorPinR, wheelPWM);
 
   //0 --> CW, 1--> CCW
-  digitalWrite(directionPinL, 0);
+  //0 = reverse, 1 = forward
+  digitalWrite(directionPinL, 1);
   digitalWrite(directionPinR, 1);
   
   countL = left.read(); //read current number of counts for left wheel
@@ -64,9 +66,9 @@ void loop() {
     deltaThetaR = thetaL - thetaL_old;
   }
 
-  currentPosition = prevPosition + deltaTheta * r;
+  currentPosition = prevPosition + deltaThetaL * r;
 
-  if (currentPosition >= finalPosition) { //if final position is reached, turn the motors off
+  if (currentPosition >= final_position) { //if final position is reached, turn the motors off
     analogWrite(motorPinL, 0);
     analogWrite(motorPinR, 0);
   }
