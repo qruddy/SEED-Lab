@@ -20,7 +20,7 @@ double final_position = 1;
 double final_angle = 0;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("Encoder start: ");
   pinMode(enablePin, HIGH);
   pinMode(motorPinL, INPUT);
@@ -40,11 +40,26 @@ double deltaThetaR = 0;
 double prevPosition = 0;
 double currentPosition = 0;
 int wheelPWM = 100;
+//velocity controller variables
+double integral = 0.0; //Variable storing current integral value utilized in the integral portion of the PI controller, in units of [feet/second^2]
+double error = 0.0; //Variable storing error used in proportional component of the PI controller, in units of [feet/second]
+double rho_d = 1.0; //desired linear velocity for control scheme, in units of [feet/second]
+double rho_Kp = 5; //Proportional Gain of the PI controller, in units of [volts/radian]
+double rho_Ki = 0.1; //Integral Gain of the PI controller, in units of [volts*seconds/radian]
+int sample_rate = 5 //num milliseconds to wait before continuing
 
 void loop() {
+  double timeStart = millis();
 
-  analogWrite(motorPinL, wheelPWM);
-  analogWrite(motorPinR, wheelPWM);
+  error = (rho_d - rho); //calculates error based on difference between current and desired position
+  integral = error*(.005)+integral; //integral calculation uses 5 ms as time between each iteration
+  int voltage_send = 255*(Kp*error + Ki*integral)/7.2; //implementing the tuned controller gains in the control system and then multiplyling the final result by a ratio to convert from volts to PWM counts.
+  if (abs(voltage_send) > 255){ //rails max PWM value to 255
+    voltage_send = 255;
+  }
+
+  analogWrite(motorPinL, voltage_send);
+  analogWrite(motorPinR, voltage_send);
 
   //0 --> CW, 1--> CCW
   //0 = reverse, 1 = forward
@@ -73,7 +88,14 @@ void loop() {
     analogWrite(motorPinR, 0);
   }
 
+  //rho calc
+  rho = (r/2) * (deltaThetaR + deltaThetaL) * sample_rate;
+  
   prevPosition = currentPosition;
   thetaL_old = thetaL;
   thetaR_old = thetaR;
+  
+  while (millis() < sample_rate + timeStart){
+        //do nothing
+     }
 }
