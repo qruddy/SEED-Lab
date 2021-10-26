@@ -65,19 +65,19 @@ void loop() {
      countR = right.read(); //read current number of counts for right wheel
      if (countL != oldCountL) {
         oldCountL = countL;
-        thetaL = 9 * (double) countL / 80; //current left wheel position in degrees
+        thetaL = PI * (double) countL / 1600; //current left wheel position in degrees
         deltaThetaL = thetaL - thetaL_old;
      }
      if (countR != oldCountR) {
         oldCountR = countR;
-        thetaR = 9 * (double) countR / 80; //current left wheel position in degrees
-        deltaThetaR = thetaL - thetaL_old;
+        thetaR = PI * (double) countR / 1600; //current left wheel position in degrees
+        deltaThetaR = thetaR - thetaR_old;
      }
 
      //calculate desired values
      ang_velocL = (deltaThetaL)/sample_rate;
      ang_velocR = (deltaThetaR)/sample_rate;
-     phi = r*(ang_velocL + ang_velocL)/d; //calculate current forward velocity to capture and sure things seem right
+     phi = r*(ang_velocL - ang_velocR)/d; //calculate current forward velocity to capture and sure things seem right
 
 
      //update measurement variables
