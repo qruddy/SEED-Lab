@@ -1,6 +1,7 @@
 //Global Variable Declarations
-double integral = 0.0; //Variable storing current integral value utilized in the integral portion of the PI controller, in units of [radian/second]
-double error = 0.0; //Variable storing error used in proportional component of the PI controller, in units of [radian]
+double integral = 0.0; //Variable storing current integral value utilized in the integral portion of the PI controller, in units of [feet/second^2]
+double error = 0.0; //Variable storing error used in proportional component of the PI controller, in units of [feet/second]
+double rho_d = 1; //desired linear velocity for control scheme, in units of [feet/second]
 double rho_Kp = 5; //Proportional Gain of the PI controller, in units of [volts/radian]
 double rho_Ki = 0.1; //Integral Gain of the PI controller, in units of [volts*seconds/radian]
 
