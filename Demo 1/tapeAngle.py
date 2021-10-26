@@ -86,11 +86,11 @@ if __name__ == '__main__':
             
             if(pos[0].size != 0): # checks if the tape is in the image
                 relX = (np.mean(pos[1]) - 480) / 960 # calculates mean horizontal phi postion
-                angle = relX * -30 # calculates phi in degrees
+                angle = relX * -53.5 # calculates phi in degrees
                 
                 print(angle)
                 lcd.clear()
-                writeNumber(int(angle/2))
+                writeNumber(int(angle))
                 time.sleep(1)
                 
                 lcd.message = "Angle: %d" % angle
