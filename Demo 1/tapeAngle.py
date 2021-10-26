@@ -82,10 +82,27 @@ if __name__ == '__main__':
             gray = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY) # converts image to grayscale
             ret,gray = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY) # converts grayscale image to binary image
             gray[500:544, 0:960] = 0 # sets bottom ~10% of image to black to account for problematic pixels
-            pos = np.nonzero(gray) # creates array of all the pixels that correspond to the tape
             
-            if(pos[0].size != 0): # checks if the tape is in the image
-                relX = (np.mean(pos[1]) - 480) / 960 # calculates mean horizontal phi postion
+            gray, contours, hierarchy = cv2.findContours(gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            if(len(contours) == 1):
+                contours = contours[0]
+            else:
+                maxArea = cv2.contourArea(contours[0])
+                i = 0
+                index = 0
+                for cont in contours:
+                    area = cv2.contourArea(cont)
+                    if(area > maxArea):
+                        maxArea = area
+                        index = i
+                    i = i + 1
+                contours = contours[index]
+                
+            m = cv2.moments[contours]
+            pos = int(m["m10"] / m["m00"])
+            
+            if(contours != None): # checks if the tape is in the image
+                relX = (pos - 480) / 960 # calculates mean horizontal phi postion
                 angle = relX * -53.5 # calculates phi in degrees
                 
                 print(angle)
