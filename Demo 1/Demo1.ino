@@ -41,6 +41,7 @@ double prevPosition = 0;
 double currentPosition = 0;
 int wheelPWM = 100;
 //velocity controller variables
+double rho = 0.0; //current velocity stored
 double integral = 0.0; //Variable storing current integral value utilized in the integral portion of the PI controller, in units of [feet/second^2]
 double error = 0.0; //Variable storing error used in proportional component of the PI controller, in units of [feet/second]
 double rho_d = 1.0; //desired linear velocity for control scheme, in units of [feet/second]
