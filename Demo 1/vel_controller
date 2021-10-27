@@ -16,11 +16,8 @@ const double wheel_gap = 1; //distance between two wheels
 //const double r = 2.9375; //radius of each wheel in inches
 const double r = 0.24479; //radius of each wheel in feet
 
-double final_position = 1;
-double final_angle = 0;
-
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println("Encoder start: ");
   pinMode(enablePin, HIGH);
   pinMode(motorPinL, INPUT);
@@ -37,80 +34,147 @@ double thetaR_old = 0;
 double thetaR = 0;
 double deltaThetaL = 0;
 double deltaThetaR = 0;
-double prevPosition = 0;
-double currentPosition = 0;
-int wheelPWM = 100;
+
 //velocity controller variables
-double integral = 0.0; //Variable storing current integral value utilized in the integral portion of the PI controller, in units of [feet/second^2]
-double error = 0.0; //Variable storing error used in proportional component of the PI controller, in units of [feet/second]
-double rho_d = 1.0; //desired linear velocity for control scheme, in units of [feet/second]
-double rho_Kp = 15; //Proportional Gain of the PI controller, in units of [volts/radian]
-double rho_Ki = 0; //Integral Gain of the PI controller, in units of [volts*seconds/radian]
-int sample_rate = 5; //num milliseconds to wait before continuing
-double rho;
-int voltage_send = 0;
+double rho = 0;
+double rho_integral = 0.0; //Variable storing current integral value utilized in the integral portion of the PI controller, in units of [feet/second^2]
+double rho_error = 0.0; //Variable storing error used in proportional component of the PI controller, in units of [feet/second]
+double rho_Kp = 0.0; //Proportional Gain of the PI controller, in units of [volts/radian]
+double rho_Ki = 33.5; //Integral Gain of the PI controller, in units of [volts*seconds/radian]
+
+//angle controller variables
+double phi = 0;
+double phi_error = 0.0;
+double phi_integral = 0.0;
+double phi_Kp = 0;
+double phi_Ki = 0;
+
+double v_bar = 0;
+double v_delta = 0;
+double x = 0; //initial position is 0
+double timeStart = 0;
+double sample_rate = 46.0; //num milliseconds to wait before continuing
+int v_left = 0;
+int v_right = 0;
+double d_t_2 = 0;
+double rho_d = 3.0; //desired linear velocity for control scheme, in units of [feet/second]
+
+//DESIRED VALUES:
+double x_d = 5.0;
+double phi_d = 0;
 
 void loop() {
-  double timeStart = millis();
-  if (timeStart < 1500){
-    rho_d = 1;
+  
+  double d_t = millis() - timeStart;
+  x = x + rho * (d_t) / 1000.0;
+
+  timeStart = millis();
+
+  //rho_d = rho_d * (x_d - x) / x_d;
+
+  if (x_d - x < 0.1) {
+    rho_d = 0.75;
+    rho_integral = 0.00;
   } else {
-    rho_d = 0;
+    rho_d = 3;
   }
-  //Serial.println(rho_d);
+  
+  Serial.println("X " + (String)x);
+  
+//---------------------------------velocity ctrl------------------------------------------
+  Serial.println("rho_d: " + (String)rho_d);
+  rho_error = (rho_d - rho); //calculates error based on difference between current and desired position
+  rho_integral = rho_error * (.070) + rho_integral; //integral calculation uses 5 ms as time between each iteration
 
-  error = (rho_d - rho); //calculates error based on difference between current and desired position
-  integral = error*(.005)+integral; //integral calculation uses 5 ms as time between each iteration
-  voltage_send = 255*(rho_Kp*error + rho_Ki*integral)/7.2; //implementing the tuned controller gains in the control system and then multiplyling the final result by a ratio to convert from volts to PWM counts.
-  if (error < 0.05){
-    error = 0.00;
+  v_bar = (255 * (rho_Kp * rho_error + rho_Ki * rho_integral) / 7.5); //implementing the tuned controller gains in the control system and then multiplyling the final result by a ratio to convert from volts to PWM counts.
+  Serial.println("rho_error = " + (String)rho_error);
+  if (abs(v_bar) > 255){ //rails max PWM value to 255
+    v_bar = 255;
+  } else if (abs(v_bar) < 12){
+    v_bar = 0;
   }
-  if (abs(voltage_send) > 255){ //rails max PWM value to 255
-    voltage_send = 255;
-  } else if (abs(voltage_send) < 12){
-    voltage_send = 0;
-  }
+//------------------------------end of velocity ctrl------------------------------------------
 
-  analogWrite(motorPinL, voltage_send);
-  analogWrite(motorPinR, (int)voltage_send * 1.05);
+//------------------------------angle ctrl------------------------------------------
+  phi_error = (phi_d - phi); //calculates error based on difference between current and desired position
+  phi_integral = phi_error*(.005)+rho_integral; //integral calculation uses 5 ms as time between each iteration
+
+  if (phi_error < 0.05){
+    phi_error = 0.00;
+    phi_integral = 0.00;
+  }
+  
+  v_delta = (255 * (phi_Kp * phi_error + phi_Ki * phi_integral) / 7.5) + v_delta; //implementing the tuned controller gains in the control system and then multiplyling the final result by a ratio to convert from volts to PWM counts.
+  if (abs(v_delta) > 255){ //rails max PWM value to 255
+    v_delta = 255;
+  } else if (abs(v_delta) < 12){
+    v_delta = 0;
+  }
+//------------------------------end of angle ctrl------------------------------------------
+
+  digitalWrite(directionPinL, 1);
+  digitalWrite(directionPinR, 1);
+
 
   //0 --> CW, 1--> CCW
   //0 = reverse, 1 = forward
-  digitalWrite(directionPinL, 1);
-  digitalWrite(directionPinR, 1);
+  //to go left of the zero axis, set L = 0 & R = 1
+  //to go right of the zero axis, set L = 1 & R = 0
+/*
+  if (phi > 0) {
+    digitalWrite(directionPinL, 0);
+    digitalWrite(directionPinR, 1);
+  } else if (phi < 0) {
+    digitalWrite(directionPinL, 0);
+    digitalWrite(directionPinR, 1);
+  } else if (abs(phi_error) < 0.05) {
+    digitalWrite(directionPinL, 1);
+    digitalWrite(directionPinR, 1);
+  }
+*/
+
+  //v_left is the voltage written to the motor controlling the left wheel
+  //v_right is the voltage written to the motor controlling the right wheel
   
+  v_left = (v_bar + v_delta) / 2.0;
+  if (v_left > 255) {
+    v_left = 255;
+  }
+  v_right = 1.1 * (v_bar - v_delta) / 2.0;
+  if (v_right > 255) {
+    v_right = 255;
+  }
+
+  analogWrite(motorPinL, abs(v_left));
+  analogWrite(motorPinR, abs(v_right));
+
   countL = left.read(); //read current number of counts for left wheel
   countR = right.read(); //read current number of counts for right wheel
   
   if (countL != oldCountL) {
     oldCountL = countL;
-    thetaL = PI * (double) countL / 160; //current left wheel position in radians
-    deltaThetaL = thetaL - thetaL_old;
+    thetaL = PI * (double) countL / 1600; //current left wheel position in radians
   }
+  deltaThetaL = thetaL - thetaL_old;
+  thetaL_old = thetaL;
 
   if (countR != oldCountR) {
     oldCountR = countR;
-    thetaR = PI * (double) countR / 1600; //current left wheel position in radians
-    deltaThetaR = thetaR - thetaR_old;
+    thetaR = -1.0 * PI * (double) countR / 1600; //current right wheel position in radians
   }
+  deltaThetaR = thetaR - thetaR_old;
+  thetaR_old = thetaR;
 
-  //currentPosition = prevPosition + deltaThetaL * r;
+  Serial.println("DT_L: " + (String)deltaThetaL);
+  Serial.println("DT_R: " + (String)deltaThetaR);
 
-  /*if (currentPosition >= final_position) { //if final position is reached, turn the motors off
-    analogWrite(motorPinL, 0);
-    analogWrite(motorPinR, 0);
-  }*/
+  //deltaThetaR = abs(deltaThetaR);
+  //deltaThetaL = abs(deltaThetaL);
 
   //rho calc
-  rho = (r/2) * (deltaThetaR + deltaThetaL) * sample_rate;
-  
-  //prevPosition = currentPosition;
-  thetaL_old = thetaL;
-  thetaR_old = thetaR;
-  Serial.println("error " + (String)error);
-  Serial.println("voltage_send " + (String)voltage_send);
-  
-  while (millis() < sample_rate + timeStart){
-        //do nothing
-     }
+  double d_t_2 = millis() - timeStart; //time since iteration of loop began
+  rho = 1000.0 * (r/2.0) * ((deltaThetaR) + (deltaThetaL)) / d_t_2;
+  Serial.println("rho " + (String)rho);
+  phi = 1000.0 * r * (deltaThetaL - deltaThetaR) / (wheel_gap * d_t_2);  
+
 }
