@@ -98,7 +98,7 @@ if __name__ == '__main__':
                     i = i + 1
                 contours = contours[index]
                 
-            m = cv2.moments[contours]
+            m = cv2.moments(contours)
             pos = int(m["m10"] / m["m00"])
             
             if(contours != None): # checks if the tape is in the image
