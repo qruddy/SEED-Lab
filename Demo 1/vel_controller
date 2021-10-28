@@ -46,8 +46,8 @@ double rho_Ki = 33.5; //Integral Gain of the PI controller, in units of [volts*s
 double phi = 0;
 double phi_error = 0.0;
 double phi_integral = 0.0;
-double phi_Kp = 0;
-double phi_Ki = 0;
+double phi_Kp = 0; //matlab simulation gives Kp = 0.362
+double phi_Ki = 0; //matlab simulation gives Ki = 11.489 ~ 11.5
 
 double v_bar = 0;
 double v_delta = 0;
