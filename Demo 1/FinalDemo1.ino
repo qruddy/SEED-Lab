@@ -39,8 +39,8 @@ double deltaThetaR = 0;
 double rho = 0;
 double rho_integral = 0.0; //Variable storing current integral value utilized in the integral portion of the PI controller, in units of [feet/second^2]
 double rho_error = 0.0; //Variable storing error used in proportional component of the PI controller, in units of [feet/second]
-double rho_Kp = 0.350; //Proportional Gain of the PI controller, in units of [volts/radian] (value = 0.0)
-double rho_Ki = 35.0; //Integral Gain of the PI controller, in units of [volts*seconds/radian] (value = 33.5)
+double rho_Kp = 0.34; //Proportional Gain of the PI controller, in units of [volts/radian] (value = 0.0)
+double rho_Ki = 33.5; //Integral Gain of the PI controller, in units of [volts*seconds/radian] (value = 33.5)
 
 //angle controller variables
 double phi = 0.0;
@@ -51,9 +51,9 @@ double phi_dot_integral = 0.0;
 double phi_derivative = 0.0;
 double phi_last_error = 0.0;
 
-double phi_dot_Kp = 0.362; //matlab simulation gives Kp = 0.362
+double phi_dot_Kp = 0.26; //matlab simulation gives Kp = 0.362
 double phi_dot_Ki = 0.34; //matlab simulation gives Ki = 11.489 ~ 11.5
-double phi_Kp = 0.65; //matlab give Kp = 3.5
+double phi_Kp = 0.35; //matlab give Kp = 3.5
 double phi_Kd = 0.25; //matlab give Kd = 0.25
 
 double v_bar = 0;
@@ -67,8 +67,8 @@ double d_t_2 = 0;
 double rho_d = 2.0; //desired linear velocity for control scheme, in units of [feet/second]
 
 //TRUE DESIRED VALUES
-const double x_d_true = 9.0;
-const double phi_d_true = 0.0; //the desired angle in degrees
+const double x_d_true = 2.0;
+const double phi_d_true = 243.4; //the desired angle in degrees
 
 //DESIRED VALUES USED BY CONTROLLER
 double x_d = 0.0; //sample of value = 5.0
@@ -89,6 +89,9 @@ void loop() {
     x_d = x_d_true;
     phi_d = 0.0;
     phi_dot = 0;
+    phi_error = 0.00;
+    phi_dot_error = 0.00;
+    phi_dot_integral = 0.00;
     Serial.println("do not");
   } 
  
@@ -144,7 +147,7 @@ void loop() {
   
   
 
-  if (x_d - x < 0.05) {
+  if (x_d - x < 0.08) {
     rho_d = 0.5;
     rho_integral = 0.00;
     Serial.println("please");
@@ -185,7 +188,7 @@ void loop() {
 
   if (!move_flag) {
     if (abs(phi_error) < 0.1){
-      //phi_error = 0.00;
+      phi_error = 0.00;
       phi_dot_error = 0.00;
       phi_dot_integral = 0.00;
       move_flag = true;
@@ -228,7 +231,7 @@ void loop() {
   if (v_left > 255) {
     v_left = 255;
   }
-  v_right = 1.14 * (v_bar - v_delta) / 2.0;
+  v_right = 1.125 * (v_bar - v_delta) / 2.0;
   if (v_right > 255) {
     v_right = 255;
   }
