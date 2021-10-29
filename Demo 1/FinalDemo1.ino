@@ -39,8 +39,8 @@ double deltaThetaR = 0;
 double rho = 0;
 double rho_integral = 0.0; //Variable storing current integral value utilized in the integral portion of the PI controller, in units of [feet/second^2]
 double rho_error = 0.0; //Variable storing error used in proportional component of the PI controller, in units of [feet/second]
-double rho_Kp = 0.0; //Proportional Gain of the PI controller, in units of [volts/radian] (value = 0.0)
-double rho_Ki = 33.5; //Integral Gain of the PI controller, in units of [volts*seconds/radian] (value = 33.5)
+double rho_Kp = 0.1; //Proportional Gain of the PI controller, in units of [volts/radian] (value = 0.0)
+double rho_Ki = 34.3; //Integral Gain of the PI controller, in units of [volts*seconds/radian] (value = 33.5)
 
 //angle controller variables
 double phi = 0.0;
@@ -52,8 +52,8 @@ double phi_derivative = 0.0;
 double phi_last_error = 0.0;
 
 double phi_dot_Kp = 0.362; //matlab simulation gives Kp = 0.362
-double phi_dot_Ki = 0.4; //matlab simulation gives Ki = 11.489 ~ 11.5
-double phi_Kp = 2.8; //matlab give Kp = 3.5
+double phi_dot_Ki = 0.34; //matlab simulation gives Ki = 11.489 ~ 11.5
+double phi_Kp = 0.65; //matlab give Kp = 3.5
 double phi_Kd = 0.25; //matlab give Kd = 0.25
 
 double v_bar = 0;
@@ -84,13 +84,15 @@ void loop() {
   } else {
     x_d = 5.0;
     phi_d = 0.0;
+    phi_dot = 0;
     Serial.println("do not");
-  }
-
-  timeStart = millis();
+  } 
  
   double d_t = millis() - timeStart;
+  Serial.println("rho" + (String)rho);
   x = x + rho * (d_t) / 1000.0;
+
+  timeStart = millis();
 
   countL = left.read(); //read current number of counts for left wheel
   countR = right.read(); //read current number of counts for right wheel
@@ -138,14 +140,14 @@ void loop() {
   
   
 
-  if (x_d - x < 0.1) {
-    rho_d = 0.75;
+  if (x_d - x < 0.05) {
+    rho_d = 0.5;
     rho_integral = 0.00;
   } else {
     rho_d = 3;
   }
   if (move_flag){
-    rho_d = rho_d * (x_d - x) / x_d;
+    //rho_d = rho_d * (x_d - x) / x_d;
   } else {
     rho_d = 0.0;
     rho = 0;
@@ -170,21 +172,20 @@ void loop() {
 
 //------------------------------angle ctrl------------------------------------------;
   phi = (r/wheel_gap) * (thetaL - thetaR);
+  Serial.println(phi);
   phi_error = (phi_d - phi);
   phi_dot_d =  phi_Kp * phi_error + phi_Kd * (phi_error - phi_last_error) / (0.07);
   phi_dot_error = (phi_dot_d - phi_dot); //calculates error based on difference between current and desired position
   phi_dot_integral = phi_dot_error*(0.07)+phi_dot_integral; //integral calculation uses 5 ms as time between each iteration
 
-  if (abs(phi_dot_error) < 0.08){
-    phi_dot_error = 0.00;
-    phi_dot_integral = 0.00;
+  if (!move_flag) {
+    if (abs(phi_error) < 0.1){
+      //phi_error = 0.00;
+      phi_dot_error = 0.00;
+      phi_dot_integral = 0.00;
+      move_flag = true;
+    }
   }
-
-  if (abs(phi_error) < 0.1){
-    phi_error = 0.00;
-    move_flag = true;
-  }
-  
   /*make distinction between phi dot and phi
   for regular phi, matlab gives these gain values:
   Kp = 3.5
@@ -222,7 +223,7 @@ void loop() {
   if (v_left > 255) {
     v_left = 255;
   }
-  v_right = 1.1 * (v_bar - v_delta) / 2.0;
+  v_right = 1.11 * (v_bar - v_delta) / 2.0;
   if (v_right > 255) {
     v_right = 255;
   }
@@ -231,6 +232,16 @@ void loop() {
   v_right = abs(v_right);
 
   
+  if(move_flag){
+    if(v_left > 0 && v_left < 40 && (x_d - x) > 0.05) {
+      v_left = v_left + 40;
+    }
+    if(v_right > 0 && v_right < 40 && (x_d - x) > 0.05) {
+      v_right = v_right + 40;
+    }
+  }
+  
+  
   analogWrite(motorPinL, v_left);
   analogWrite(motorPinR, v_right);
   
@@ -238,7 +249,9 @@ void loop() {
     deltaThetaR = abs(deltaThetaR);
     deltaThetaL = abs(deltaThetaL);
   }
-  
+
+  Serial.println("dt L " + (String)deltaThetaL);
+  Serial.println("dt R " + (String)deltaThetaR);
 
   //rho calc
   double d_t_2 = millis() - timeStart; //time since iteration of loop began
