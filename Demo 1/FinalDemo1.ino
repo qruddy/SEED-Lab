@@ -39,8 +39,8 @@ double deltaThetaR = 0;
 double rho = 0;
 double rho_integral = 0.0; //Variable storing current integral value utilized in the integral portion of the PI controller, in units of [feet/second^2]
 double rho_error = 0.0; //Variable storing error used in proportional component of the PI controller, in units of [feet/second]
-double rho_Kp = 0.1; //Proportional Gain of the PI controller, in units of [volts/radian] (value = 0.0)
-double rho_Ki = 34.3; //Integral Gain of the PI controller, in units of [volts*seconds/radian] (value = 33.5)
+double rho_Kp = 0.350; //Proportional Gain of the PI controller, in units of [volts/radian] (value = 0.0)
+double rho_Ki = 35.0; //Integral Gain of the PI controller, in units of [volts*seconds/radian] (value = 33.5)
 
 //angle controller variables
 double phi = 0.0;
@@ -64,25 +64,29 @@ double sample_rate = 46.0; //num milliseconds to wait before continuing
 int v_left = 0;
 int v_right = 0;
 double d_t_2 = 0;
-double rho_d = 3.0; //desired linear velocity for control scheme, in units of [feet/second]
+double rho_d = 2.0; //desired linear velocity for control scheme, in units of [feet/second]
 
-//DESIRED VALUES:
-double x_d = 5.0; //sample of value = 5.0
+//TRUE DESIRED VALUES
+const double x_d_true = 9.0;
+const double phi_d_true = 0.0; //the desired angle in degrees
+
+//DESIRED VALUES USED BY CONTROLLER
+double x_d = 0.0; //sample of value = 5.0
 double phi_dot_d =  0.0; //sample value of -pi/2
-double phi_d =  PI/2;
+double phi_d = 0.0;
+//FLAG TO TRANSITION TO FORWARD MOVEMENT
 bool move_flag = false;
 
 void loop() {
 
   Serial.println("flag " + (String)move_flag);
   
-  
   if (!move_flag){
     x_d = 0.0;
-    phi_d = PI/2;
+    phi_d = phi_d_true * PI / 180.0; //desired angle in radians
     v_bar = 0;
   } else {
-    x_d = 5.0;
+    x_d = x_d_true;
     phi_d = 0.0;
     phi_dot = 0;
     Serial.println("do not");
@@ -143,6 +147,7 @@ void loop() {
   if (x_d - x < 0.05) {
     rho_d = 0.5;
     rho_integral = 0.00;
+    Serial.println("please");
   } else {
     rho_d = 3;
   }
@@ -223,7 +228,7 @@ void loop() {
   if (v_left > 255) {
     v_left = 255;
   }
-  v_right = 1.11 * (v_bar - v_delta) / 2.0;
+  v_right = 1.14 * (v_bar - v_delta) / 2.0;
   if (v_right > 255) {
     v_right = 255;
   }
@@ -233,10 +238,10 @@ void loop() {
 
   
   if(move_flag){
-    if(v_left > 0 && v_left < 40 && (x_d - x) > 0.05) {
+    if((v_left > 0) && ( v_left < 40) && ((x_d - x) > 0.05)) {
       v_left = v_left + 40;
     }
-    if(v_right > 0 && v_right < 40 && (x_d - x) > 0.05) {
+    if((v_right > 0) && (v_right < 40) && ((x_d - x) > 0.05)) {
       v_right = v_right + 40;
     }
   }
