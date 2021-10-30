@@ -1,10 +1,10 @@
 Folder for SEED Lab Team 10 Demo 1
 
-Arduino - folder for Arduino code
+Arduino - folder for Arduino code, including the encoder reading and control systems
 
-Rotation Numbers -
+Rotation Numbers - values used for determing transfer function in Simulink for phi
 
-Serial Monitor Numbers -
+Serial Monitor Numbers - values used for determing transfer function in Simulink for rho
 
 project-board.md - description of each team member's task(s)
 
