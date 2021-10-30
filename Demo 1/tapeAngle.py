@@ -51,24 +51,14 @@ if __name__ == '__main__':
     while(1): # loop until the porgram is manually stopped
     
         # grab an image from the camera
-        #print("Capturing Image...")
         try:
             camera.capture(rawCapture, format="bgr")
             img = rawCapture.array
         except:
             print("Failed to capture")
 
-    # save the image to the disk
-        #print("Saving image")
-        #try:
-            #cv2.imwrite('test.jpg', img)
-        #except:
-            #print("Couldn't save")
-
     # display the image
-        #print("Loading image")
         try:
-            #img = cv2.imread('test.jpg')
             img = img[:,:,::-1] # flips image colors
             img = cv2.resize(img, None, fx = 0.5, fy = 0.5, interpolation = cv2.INTER_CUBIC) # decreases image size by half
             
@@ -83,10 +73,11 @@ if __name__ == '__main__':
             ret,gray = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY) # converts grayscale image to binary image
             gray[500:544, 0:960] = 0 # sets bottom ~10% of image to black to account for problematic pixels
             
-            gray, contours, hierarchy = cv2.findContours(gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-            if(len(contours) == 1):
+            gray, contours, hierarchy = cv2.findContours(gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) # find contours in image
+            
+            if(len(contours) == 1): # if there is only one contour, it is the tape
                 contours = contours[0]
-            else:
+            else: # else, find the contour with the largest area, it is likely the tape
                 maxArea = cv2.contourArea(contours[0])
                 i = 0
                 index = 0
@@ -98,8 +89,8 @@ if __name__ == '__main__':
                     i = i + 1
                 contours = contours[index]
                 
-            m = cv2.moments(contours)
-            pos = int(m["m10"] / m["m00"])
+            m = cv2.moments(contours) # find the moments of the contour
+            pos = int(m["m10"] / m["m00"]) # calculate the x position of the center of the contour
             
             if(contours != None): # checks if the tape is in the image
                 relX = (pos - 480) / 960 # calculates mean horizontal phi postion
