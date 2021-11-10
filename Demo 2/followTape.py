@@ -4,23 +4,23 @@ from picamera import PiCamera
 import time
 import cv2
 import numpy as np
-#import smbus
-#import board
-#import adafruit_character_lcd.character_lcd_rgb_i2c as character_lcd
-#from math import pi
+import smbus
+import board
+import adafruit_character_lcd.character_lcd_rgb_i2c as character_lcd
+from math import pi
 
-#lcd_columns = 16
-#lcd_rows = 2
+lcd_columns = 16
+lcd_rows = 2
 
-#bus = smbus.SMBus(1)
-#i2c = board.I2C()
-#lcd = character_lcd.Character_LCD_RGB_I2C(i2c,lcd_columns,lcd_rows)
+bus = smbus.SMBus(1)
+i2c = board.I2C()
+lcd = character_lcd.Character_LCD_RGB_I2C(i2c,lcd_columns,lcd_rows)
 
-#address = 0x04
+address = 0x04
 
-#def writeNumber(value):
-#    bus.write_byte(address, value)
-#    return -1
+def writeNumber(value):
+    bus.write_byte(address, value)
+    return -1
 
 if __name__ == '__main__':
  
@@ -118,27 +118,27 @@ if __name__ == '__main__':
                 print("Tape found")
                 found = True
                 
-                #lcd.clear()
-                #writeNumber(50)
-                #time.sleep(1)
+                lcd.clear()
+                writeNumber(50)
+                time.sleep(1)
                 
-                #lcd.message = "Tape Found"
+                lcd.message = "Tape Found"
                 
             elif(found != False and close != True):
                 print(angle)
-                #lcd.clear()
-                #writeNumber(int(angle))
-                #time.sleep(1)
+                lcd.clear()
+                writeNumber(int(angle))
+                time.sleep(1)
                 
-                #lcd.message = "Angle: %d" % angle
+                lcd.message = "Angle: %d" % angle
             
             elif(found != False and close != False):
                 print("Stop")
-                #lcd.clear()
-                #writeNumber(100)
-                #time.sleep(1)
+                lcd.clear()
+                writeNumber(100)
+                time.sleep(1)
                 
-                #lcd.message = "Stop"
+                lcd.message = "Stop"
             
         except:
             print("Couldn't load")
