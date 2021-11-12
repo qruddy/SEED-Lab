@@ -1,4 +1,5 @@
 #include <Encoder.h>
+#include <Wire.h>
 
 //wheel encoder declarations
 Encoder left(2,11);
@@ -10,11 +11,18 @@ const int directionPinL = 7;
 const int directionPinR = 8;
 const int motorPinL = 9;
 const int motorPinR = 10;
+double phi_d = 0;
+
+#define SLAVE_ADDRESS 0x04
+double receive[32] = {};
+void receiveData(int);
+
 
 const double wheel_gap = 1; //distance between two wheels
 //d = 5.875 in //gap in inches
 const double r = 0.24479; //radius of each wheel in feet
 //r = 2.9375; //radius in inches
+bool ctrlFlag = false; //when tape is initially detected, this flag will be set true
 
 void setup() {
   Serial.begin(9600);
@@ -22,6 +30,11 @@ void setup() {
   pinMode(enablePin, HIGH);
   pinMode(motorPinL, INPUT);
   pinMode(motorPinR, INPUT);
+  Wire.begin(SLAVE_ADDRESS);
+
+  Wire.onReceive(receiveData);
+
+  Serial.println("Ready!");
 }
 
 long oldCountL = -999;
@@ -68,10 +81,10 @@ int v_right = 0;
 double d_t_2 = 0;
 double rho_d = 2.0; //desired linear velocity for control scheme, in units of [feet/second]
 
-bool ctrlFlag = false; //when tape is initially detected, this flag will be set true
 
 void loop() {
-  double phi_d = 0;
+  Serial.println("ctrlflag " + (String)ctrlFlag);
+  int i = 0;
   //spin in a circle until tape detected
   if (!ctrlFlag) { //rotate in a circle
     digitalWrite(directionPinL, 1);
@@ -102,17 +115,11 @@ void loop() {
     
     
     //controls which direction the wheels spin
-    if (phi_error > 0) { //rotate left
-      digitalWrite(directionPinL, 1);
-      digitalWrite(directionPinR, 0);
-    } else if (phi_error < 0) { //rotate right
-      digitalWrite(directionPinL, 0);
-      digitalWrite(directionPinR, 1);
-    } else if (phi_error == 0){ //drive forward
-      digitalWrite(directionPinL, 1);
-      digitalWrite(directionPinR, 1);
-      phi_last_error = 0;
-    }
+    Serial.println("phi_error " + (String)phi_error);
+    Serial.println("phi d " + (String)phi_d);
+    
+    digitalWrite(directionPinL, 1);
+    digitalWrite(directionPinR, 1);
   
   
   //---------------------------------velocity ctrl------------------------------------------
@@ -128,7 +135,7 @@ void loop() {
   
   //------------------------------angle ctrl------------------------------------------
     phi = (r/wheel_gap) * (thetaL - thetaR);
-    Serial.println(phi);
+    //Serial.println(phi);
     phi_error = phi_d - phi; //phi d is determined by the intial angle given by raspberry pi camera, and should not change
     phi_dot_d =  phi_Kp * phi_error + phi_Kd * (phi_error - phi_last_error) / (0.07); //calculate desired phi dot based on desired phi (angular position)
     phi_dot_error = (phi_dot_d - phi_dot); //calculates error based on difference between current and desired position
@@ -139,6 +146,7 @@ void loop() {
     } else if (abs(v_delta) < 12){
       v_delta = 0;
     }
+
   //------------------------------end of angle ctrl------------------------------------------
   
   
@@ -171,4 +179,23 @@ void loop() {
   //reset robot's angle to zero
   //for trial 1, move forward 4 ft, which should place the robot near or above the tape
   //for trial 2, move until the camera no longer detects blue tape
+}
+
+void receiveData(int byteCount){
+  int i = 0;
+  receive[i] = {};
+  while (Wire.available()){
+    receive[i] = Wire.read();
+    if (receive[i] == 50){
+      ctrlFlag = true;
+    } else{
+    
+        if (receive[i] > 200) {
+          phi_d = receive[i] - 256;
+        } else {
+          phi_d = receive[i];
+        }
+    }
+    ++i;
+  }
 }
