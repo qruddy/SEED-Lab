@@ -4,23 +4,32 @@ from picamera import PiCamera
 import time
 import cv2
 import numpy as np
-import smbus
-import board
-import adafruit_character_lcd.character_lcd_rgb_i2c as character_lcd
-from math import pi
 
-lcd_columns = 16
-lcd_rows = 2
+try:
+    import smbus
+    import board
+    import adafruit_character_lcd.character_lcd_rgb_i2c as character_lcd
+    from math import pi
 
-bus = smbus.SMBus(1)
-i2c = board.I2C()
-lcd = character_lcd.Character_LCD_RGB_I2C(i2c,lcd_columns,lcd_rows)
+    lcd_columns = 16
+    lcd_rows = 2
 
-address = 0x04
+    bus = smbus.SMBus(1)
+    i2c = board.I2C()
+    lcd = character_lcd.Character_LCD_RGB_I2C(i2c,lcd_columns,lcd_rows)
 
-def writeNumber(value):
-    bus.write_byte(address, value)
-    return -1
+    address = 0x04
+
+    def writeNumber(value):
+        bus.write_byte(address, value)
+        return -1
+    
+except:
+    print("I2C Not Initialized")
+    
+found = False # flag for signaling if tape has been found
+close = False # flag for signaling if tape is close
+sentStop = False
 
 if __name__ == '__main__':
  
@@ -43,13 +52,10 @@ if __name__ == '__main__':
     # allow the camera to warmup
     time.sleep(0.1)
     
-    lower = np.array([110, 50, 50])
-    upper = np.array([130, 255, 255]) # assign upper and lower bounds for blue in HSV
+    lower = np.array([100, 100, 100])
+    upper = np.array([130, 200, 200]) # assign upper and lower bounds for blue in HSV
     
     kernel = np.ones((20, 20), np.uint8) # generate kernel of 1's for morphology
-    
-    found = False # flag for signaling if tape has been found
-    close = False # flag for signaling if tape is close
     
     while(1): # loop until the porgram is manually stopped
     
@@ -78,22 +84,32 @@ if __name__ == '__main__':
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV) # generates HSV version of image
             mask = cv2.inRange(hsv, lower, upper) # generates mask for blue based on HSV image
             
+        except:
+            print("Mask Failed")
+            
+        try:
             output = cv2.bitwise_and(img, img, mask = mask) # applies mask to image
             output = cv2.morphologyEx(output, cv2.MORPH_CLOSE, kernel) # closes holes in masked image
             output = cv2.blur(output, (6, 6)) # blurs image
             
-            #cv2.imshow('Test', np.hstack([img, output]))
-            #cv2.waitKey(0)
-            #cv2.destroyAllWindows()
+        except:
+            print("Morphology Failed")
             
+        #cv2.imshow('Test', np.hstack([img, output]))
+        #cv2.waitKey(0)
+        #cv2.destroyAllWindows()
+            
+        try:
             gray = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY) # converts image to grayscale
             ret,gray = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY) # converts grayscale image to binary image
             gray[500:544, 0:960] = 0 # sets bottom ~10% of image to black to account for problematic pixels
+            gray[0:45, 0:960] = 0
             
             gray, contours, hierarchy = cv2.findContours(gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             if(len(contours) == 1):
                 contours = contours[0]
-            else:
+                maxArea = cv2.contourArea(contours[0])
+            elif(len(contours) != 0):
                 maxArea = cv2.contourArea(contours[0])
                 i = 0
                 index = 0
@@ -104,43 +120,77 @@ if __name__ == '__main__':
                         index = i
                     i = i + 1
                 contours = contours[index]
-                    
-            m = cv2.moments(contours)
-            xPos = int(m["m10"] / m["m00"])
-            relX = (xPos - 480) / 960
-            angle = relX * -53.5 # calculates phi in degrees
             
-            yPos = int(m["m01"] / m["m00"])
-            if(yPos >= 326):
-                close = True
+        except:
+            print("Contours Failed")
             
-            if(contours != None and found == False):
-                print("Tape found")
-                found = True
+        #if(found == True and len(contours) != 0):
+         #   edges = cv2.Canny(gray, 100, 255)
+          #  indicies = np.where(edges != [0])
+           # coords = zip(indicies[1])
+            #for coord in coords:
+             #   if(coord[0] >= 250):
+              #      close = True
+               #     break
+            
+        #try:
+         #   if(found == True and len(contours) != 0):
+          #      yPos = int(m["m01"] / m["m00"])
+           #     if(yPos >= 490):
+            #        close = True
+        #except:
+         #   print("Close Calculation Failed")
+            
+        try:        
+            if(len(contours) != 0):
+                m = cv2.moments(contours)
+                pos = int(m["m10"] / m["m00"])
+                relX = (pos - 480) / 960
+                angle = relX * -53.5 # calculates phi in degrees
+            
+        except:
+            print("Angle Calculation Failed")
+            
+        if(found == False and len(contours) != 0 and maxArea >= 50):
+            print("Tape found")
+            found = True
                 
+            try:
                 lcd.clear()
                 writeNumber(50)
                 time.sleep(1)
                 
                 lcd.message = "Tape Found"
+                    
+            except:
+                print("Found I2C Failed")
                 
-            elif(found != False and close != True):
-                print(angle)
+        if(found != False and close != True and len(contours) != 0 and maxArea >= 50):
+            print(angle)
+                
+            try:
                 lcd.clear()
                 writeNumber(int(angle))
                 time.sleep(1)
                 
                 lcd.message = "Angle: %d" % angle
+                    
+            except:
+                print("Angle I2C Failed")
             
-            elif(found != False and close != False):
-                print("Stop")
+        elif(found != False and (len(contours) == 0 or maxArea < 50) and sentStop != True):
+            print("Stop")
+            sentStop = True
+                
+            try:
                 lcd.clear()
                 writeNumber(100)
                 time.sleep(1)
                 
                 lcd.message = "Stop"
-            
-        except:
-            print("Couldn't load")
+                    
+            except:
+                print("Stop I2C Failed")
             
         rawCapture.truncate(0) # empties camera buffer
+
