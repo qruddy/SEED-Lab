@@ -25,11 +25,10 @@ try:
         return -1
     
 except:
-    print("I2C Not Initialized")
+    print("I2C Not Initialized") # initializes I2C communication with the LCD
     
 found = False # flag for signaling if tape has been found
-close = False # flag for signaling if tape is close
-sentStop = False
+sentStop = False # flag to determine if stop flag has been sent
 
 if __name__ == '__main__':
  
@@ -103,9 +102,9 @@ if __name__ == '__main__':
             gray = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY) # converts image to grayscale
             ret,gray = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY) # converts grayscale image to binary image
             gray[500:544, 0:960] = 0 # sets bottom ~10% of image to black to account for problematic pixels
-            gray[0:45, 0:960] = 0
+            gray[0:45, 0:960] = 0 # sets top 45 pixels to black to account for windows in the room
             
-            gray, contours, hierarchy = cv2.findContours(gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            gray, contours, hierarchy = cv2.findContours(gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) # finds groups of blue
             if(len(contours) == 1):
                 contours = contours[0]
                 maxArea = cv2.contourArea(contours[0])
@@ -119,30 +118,13 @@ if __name__ == '__main__':
                         maxArea = area
                         index = i
                     i = i + 1
-                contours = contours[index]
+                contours = contours[index] # finds largest group of blue, this is likely the tape
             
         except:
             print("Contours Failed")
-            
-        #if(found == True and len(contours) != 0):
-         #   edges = cv2.Canny(gray, 100, 255)
-          #  indicies = np.where(edges != [0])
-           # coords = zip(indicies[1])
-            #for coord in coords:
-             #   if(coord[0] >= 250):
-              #      close = True
-               #     break
-            
-        #try:
-         #   if(found == True and len(contours) != 0):
-          #      yPos = int(m["m01"] / m["m00"])
-           #     if(yPos >= 490):
-            #        close = True
-        #except:
-         #   print("Close Calculation Failed")
-            
+
         try:        
-            if(len(contours) != 0):
+            if(len(contours) != 0): # calculates the angle phi
                 m = cv2.moments(contours)
                 pos = int(m["m10"] / m["m00"])
                 relX = (pos - 480) / 960
@@ -151,7 +133,7 @@ if __name__ == '__main__':
         except:
             print("Angle Calculation Failed")
             
-        if(found == False and len(contours) != 0 and maxArea >= 50):
+        if(found == False and len(contours) != 0 and maxArea >= 25): # if there is a large enough group of blue, send a flag
             print("Tape found")
             found = True
                 
@@ -165,7 +147,7 @@ if __name__ == '__main__':
             except:
                 print("Found I2C Failed")
                 
-        if(found != False and close != True and len(contours) != 0 and maxArea >= 50):
+        if(found != False and close != True and len(contours) != 0 and maxArea >= 25): # if there is a large enough group of blue, send the angle
             print(angle)
                 
             try:
@@ -178,7 +160,7 @@ if __name__ == '__main__':
             except:
                 print("Angle I2C Failed")
             
-        elif(found != False and (len(contours) == 0 or maxArea < 50) and sentStop != True):
+         elif(found != False and (len(contours) == 0 or maxArea < 50) and sentStop != True): # if the tape is no longer seen and stop has not been sent, send a stop flag
             print("Stop")
             sentStop = True
                 
@@ -193,4 +175,3 @@ if __name__ == '__main__':
                 print("Stop I2C Failed")
             
         rawCapture.truncate(0) # empties camera buffer
-
