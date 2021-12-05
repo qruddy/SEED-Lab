@@ -48,7 +48,7 @@ time.sleep(0.1)
 lower = np.array([110, 50, 50])
 upper = np.array([130, 255, 255]) # assign upper and lower bounds for blue in HSV
     
-kernel = np.ones((20, 20), np.uint8) # generate kernel of 1's for morphology
+kernel = np.ones((5, 5), np.uint8) # generate kernel of 1's for morphology
 
 n = 0
 
@@ -87,6 +87,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
             
         #gray, contours, hierarchy = cv2.findContours(gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         
+        width = -1
+        
         try:
         
             if(len(contours) > 0):
@@ -101,16 +103,18 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
             
                 m = cv2.moments(contour)
                 center = (int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"]))
+                
+                width = -1
             
                 if(cv2.contourArea(box) > 1000):
-                    cv2.drawContours(img, [box], 0, (0, 0, 255), 2)
-                    cv2.circle(img, center, 5, (0, 0, 255), -1)
-                    #cv2.imshow('Test', img)
+                    #cv2.drawContours(img, [box], 0, (0, 0, 255), 2)
+                    #cv2.circle(img, center, 5, (0, 0, 255), -1)
                     
-                    #hull = cv2.convexHull(contour)
-                    #cv2.convexityDefects(contour, hull, defects)
+                    width = np.sqrt((box[0][0] - box[1][0])**2 + (box[0][1] - box[1][1])**2)
+                    length = np.sqrt((box[0][0] - box[3][0])**2 + (box[0][1] - box[3][1])**2)
                     
-                    width = np.sqrt((box[0][0] - box[1][0])^2 + (box[0][1] - box[1][1])^2)
+                    #print(width)
+                    #print(length)
                     
                     #width = box[0][0] - box[1][0]
                     
@@ -122,68 +126,41 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
                             
             ####################################### UNCOMMENT TO SEE VIDEO ##############################       
                     
-            #cv2.imshow('Test', img)
+            cv2.imshow('Test', img)
                     
             #############################################################################################
                     
         except:
             print("Angle calculation failed")
             
-        try:
-            if(width > 10):
-                print("Cross")
+        if(width != -1 and np.abs(width - length) <= 10):
+            print("Cross")
+            try:
                 writeNumber(100)
-                lcd.clear()
-                time.sleep(1)
+            except:
+                print("Arduino Communication Failed")
                 
-                lcd.message = "Cross found"
-                        
-            else:
-                print(angle)
-                print(angle)
-                writeNumber(int(angle))
+            try:
                 lcd.clear()
-                time.sleep(1)
-            
+                time.sleep(0.25)
+                lcd.message = "Cross found"
+            except:
+                print("I2C Communcation Failed")
+                        
+        elif(width != -1):
+            print(angle)
+            try:
+                writeNumber(int(angle))
+            except:
+                print("Arduino Communication Failed")
+                
+            try:
+                lcd.clear()
+                time.sleep(0.25)
                 lcd.message = "Angle: %d" % angle
-        
-        #except:
-            #print("I2C communcation failed")
-            
-            #if(radius > 100):
-                #cv2.circle(img, (int(x), int(y)), int(radius), (0, 255, 255), 2)
-                #cv2.circle(img, center, 5, (0, 0, 255), -1)
-                #cv2.imshow('Test', img)
-            
-            #contours = contours[0]
-        #elif(len(contours) > 1):
-         #   maxArea = cv2.contourArea(contours[0])
-          #  i = 0
-           # index = 0
-            #for cont in contours:
-             #   area = cv2.contourArea(cont)
-              #  if(area > maxArea):
-               #     maxArea = area
-                #    index = i
-                #i = i + 1
-            #contours = contours[index]
-    
-        #if(len(contours) > 0):
-         #   m = cv2.moments(contours)
-          #  xPos = int(m["m10"] / m["m00"])
-           # yPos = int(m["m01"] / m["m00"])
-            #relX = (xPos - 320) / 640
-            #angle = relX * -53.5 # calculates phi in degrees
-    
-            #print(angle)
-            #print("X:", xPos)
-            #print("Y:", yPos)
-            #print()
-            
-            #cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
-            #cv2.imshow('Test', np.hstack([img, output]))
-            
-    #cv2.imshow('Test', np.hstack([img, output]))
+            except:
+                print("I2C Communcation Failed")
+
     
     n = n + 1
     if(n == 10):
