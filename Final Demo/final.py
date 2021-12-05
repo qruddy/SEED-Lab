@@ -34,19 +34,8 @@ rawCapture = PiRGBArray(camera, size=(640, 480))
 
 time.sleep(0.1)
 
-# automatic white balance
-#camera.iso = 100
-#time.sleep(2)
-    
-#camera.shutter_speed = camera.exposure_speed
-#camera.exposure_mode = 'off'
-    
-#g = camera.awb_gains
-#camera.awb_mode = 'off'
-#camera.awb_gains = g
-
-lower = np.array([110, 50, 50])
-upper = np.array([130, 255, 255]) # assign upper and lower bounds for blue in HSV
+lower = np.array([100, 50, 50])
+upper = np.array([140, 255, 255]) # assign upper and lower bounds for blue in HSV
     
 kernel = np.ones((5, 5), np.uint8) # generate kernel of 1's for morphology
 
@@ -77,15 +66,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     except:
         print("Contour detection failed")
     
-    #cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
-    #cv2.imshow('Test', np.hstack([img, output]))
-    
     if(n > -1):
-    
-        #gray = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY) # converts image to grayscale
-        #ret,gray = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY) # converts grayscale image to binary image
-            
-        #gray, contours, hierarchy = cv2.findContours(gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         
         width = -1
         
@@ -94,12 +75,9 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
             if(len(contours) > 0):
             
                 contour = max(contours, key=cv2.contourArea)
-                #((x, y), radius) = cv2.minEnclosingCircle(contour)
                 rect = cv2.minAreaRect(contour)
                 box = cv2.boxPoints(rect)
                 box = np.int0(box)
-                
-                #print(box)
             
                 m = cv2.moments(contour)
                 center = (int(m["m10"] / m["m00"]), int(m["m01"] / m["m00"]))
@@ -107,18 +85,14 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
                 width = -1
             
                 if(cv2.contourArea(box) > 1000):
-                    #cv2.drawContours(img, [box], 0, (0, 0, 255), 2)
-                    #cv2.circle(img, center, 5, (0, 0, 255), -1)
+                    cv2.drawContours(img, [box], 0, (0, 0, 255), 2)
+                    cv2.circle(img, center, 5, (0, 0, 255), -1)
                     
                     width = np.sqrt((box[0][0] - box[1][0])**2 + (box[0][1] - box[1][1])**2)
                     length = np.sqrt((box[0][0] - box[3][0])**2 + (box[0][1] - box[3][1])**2)
                     
                     #print(width)
                     #print(length)
-                    
-                    #width = box[0][0] - box[1][0]
-                    
-                    #print(width)
                     
                     relX = (center[0] - 320) / 640
                     angle = relX * -53.5 # calculates phi in degrees
@@ -139,13 +113,6 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
                 writeNumber(100)
             except:
                 print("Arduino Communication Failed")
-                
-            try:
-                lcd.clear()
-                time.sleep(0.25)
-                lcd.message = "Cross found"
-            except:
-                print("I2C Communcation Failed")
                         
         elif(width != -1):
             print(angle)
@@ -153,13 +120,6 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
                 writeNumber(int(angle))
             except:
                 print("Arduino Communication Failed")
-                
-            try:
-                lcd.clear()
-                time.sleep(0.25)
-                lcd.message = "Angle: %d" % angle
-            except:
-                print("I2C Communcation Failed")
 
     
     n = n + 1
