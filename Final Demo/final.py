@@ -16,7 +16,7 @@ try:
 
     bus = smbus.SMBus(1)
     i2c = board.I2C()
-    lcd = character_lcd.Character_LCD_RGB_I2C(i2c,lcd_columns,lcd_rows)
+    #lcd = character_lcd.Character_LCD_RGB_I2C(i2c,lcd_columns,lcd_rows)
 
     address = 0x04
 
@@ -34,12 +34,14 @@ rawCapture = PiRGBArray(camera, size=(640, 480))
 
 time.sleep(0.1)
 
-lower = np.array([100, 50, 50])
-upper = np.array([140, 255, 255]) # assign upper and lower bounds for blue in HSV
+lower = np.array([95, 50, 50])
+upper = np.array([135, 255, 255]) # assign upper and lower bounds for blue in HSV
     
 kernel = np.ones((5, 5), np.uint8) # generate kernel of 1's for morphology
 
 n = 0
+
+count = 0
 
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
     
@@ -107,8 +109,12 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         except:
             print("Angle calculation failed")
             
-        if(width != -1 and np.abs(width - length) <= 10):
+        if(width != -1 and box[1][0] >= 30 and box[0][0] <= 610 and length >= 150 and np.abs(width - length) <= 50):
+            count = count + 1
+            
+        if(count > 1):
             print("Cross")
+            print(np.abs(width - length))
             try:
                 writeNumber(100)
             except:
