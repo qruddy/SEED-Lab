@@ -1,0 +1,6 @@
+Final Demo Readme
+
+final.py - file containing python code for final demo, which uses video for the computer vision rather than taking pictures over and over
+
+FinalDemo.ino - file containing arduino code for final demo, which is similar to demo 2 but uses different flags to determine when to stop, 
+and phi error is determined by the camera rather than by a pre-set input
